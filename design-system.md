@@ -1,4 +1,4 @@
-# Orka 01 Pro — Design System
+# Aurio 01 Pro — Design System
 
 ## 1. Design Tokens
 

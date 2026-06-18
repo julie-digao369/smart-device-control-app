@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Hearwave">
+  <meta name="apple-mobile-web-app-title" content="Aurio">
   <link rel="apple-touch-icon" href="icon-180.png">
-  <title>Hearwave</title>
+  <title>Aurio</title>
   <link rel="preload" as="image" href="启动页背景图.webp" fetchpriority="high">
   <style>
     :root {
@@ -3123,7 +3123,7 @@
 
       <main class="scroll" id="volumePage">
         <header class="hero">
-          <h1>Hearwave Smart</h1>
+          <h1>Aurio Smart</h1>
           <div class="channels">
             <div class="chip"><span class="led"></span><span>Left</span><span id="leftPct">75%</span></div>
             <div class="chip"><span class="led"></span><span>Right</span><span id="rightPct">90%</span></div>
@@ -3398,7 +3398,7 @@
 
       <main class="scroll page-hidden" id="noisePage">
         <header class="hero">
-          <h1>Hearwave Smart</h1>
+          <h1>Aurio Smart</h1>
           <div class="channels">
             <div class="chip"><span class="led"></span><span>Left</span><span>75%</span></div>
             <div class="chip"><span class="led"></span><span>Right</span><span>90%</span></div>
@@ -3617,7 +3617,7 @@
 
       <main class="scroll page-hidden" id="mediaPage" style="background: linear-gradient(180deg, #DCE1EA 0%, #F4F1EC 44%, #FFFBF2 100%); --page-top-tint: none;">
         <header class="hero">
-          <h1>Hearwave Smart</h1>
+          <h1>Aurio Smart</h1>
           <div class="channels">
             <div class="chip"><span class="led"></span><span>Left</span><span>75%</span></div>
             <div class="chip"><span class="led"></span><span>Right</span><span>90%</span></div>
@@ -3807,12 +3807,12 @@
       <!-- ═══ Pair bottom sheet (staged: ready → searching → found → pairing → done) ═══ -->
       <div class="pair-backdrop" id="pairBackdrop">
         <div class="pair-brand">
-          <span class="pair-brand-mark">Hearwave</span>
+          <span class="pair-brand-mark">Aurio</span>
         </div>
         <div class="pair-sheet" id="pairSheet" data-stage="ready">
           <span class="pair-handle"></span>
           <p class="pair-status" id="pairStatus">Get your aids ready</p>
-          <h2 class="pair-name" id="pairName">Hearwave Smart</h2>
+          <h2 class="pair-name" id="pairName">Aurio Smart</h2>
           <div class="pair-hero">
             <span class="pair-ring"></span>
             <span class="pair-ring"></span>
@@ -3833,9 +3833,9 @@
 
       <!-- ═══ Splash overlay ═══ -->
       <div class="splash-overlay active" id="splashOverlay">
-        <span class="splash-mark">Hearwave</span>
+        <span class="splash-mark">Aurio</span>
         <div class="splash-stage">
-          <img class="splash-glasses" src="产品图.png" alt="Hearwave Smart glasses" />
+          <img class="splash-glasses" src="产品图.png" alt="Aurio Smart glasses" />
           <h1 class="splash-title">Hearing aids<br><em>hidden in glasses.</em></h1>
         </div>
         <button class="splash-cta" id="splashExplore">Get started</button>
@@ -5152,7 +5152,7 @@
       const clearPairTimers = () => { pairTimers.forEach(t => clearTimeout(t)); pairTimers = []; };
       const after = (ms, fn) => { pairTimers.push(setTimeout(fn, ms)); };
       // The one product this app pairs with.
-      const PRODUCT = { name: 'Hearwave Smart', img: '产品图.png', hint: 'Press and hold the temple button until the light pulses.' };
+      const PRODUCT = { name: 'Aurio Smart', img: '产品图.png', hint: 'Press and hold the temple button until the light pulses.' };
       let selectedDevice = PRODUCT.name;
 
       // Each stage maps to a status line, button label, and progress dot.

@@ -1,124 +1,104 @@
-# Orka 绘听 1.0.0
+# Aurio — Hearing-Aid Companion App
 
-Orka 助听器伴侣 App 的 **iOS PWA 交互原型**——演示音量控制、降噪模式、媒体流转、亲友远程代调、家属端使用数据看板等核心场景。
+An iOS-style PWA **interaction prototype** for a glasses-form hearing aid: a calm, tactile control surface for volume, noise reduction, and media — built to demonstrate UX/UI and front-end interaction-design craft.
 
-🌐 **在线演示**：https://orka-app.julie-gao369.workers.dev
+> **Portfolio / design-demo notice.** *Aurio* is a **fictional brand**. This is a personal design-portfolio piece — an anonymized concept demo that is **not affiliated with, endorsed by, or built from the confidential materials of any real company**. It is inspired by real product-design experience, with all brand identity, names, and assets re-created for demonstration purposes only.
 
-> 推荐用 iPhone Safari 打开（"分享 → 添加到主屏幕"后可作为 PWA 独立运行）；桌面浏览器中会以 iPhone 390×844 外壳的形式展示。
+🌐 **Live demo:** https://smart-device-control-app.julie-gao369.workers.dev
 
----
-
-## 项目结构
-
-```
-绘听1.0.0/
-├── index.html               # 主原型（中文，HTML + CSS + JS 全在这一个文件）
-├── index-en.html            # 英文版（备份）
-├── index-zh.html            # 中文备份
-├── orka-tokens.css          # 设计 token 源（颜色 / 间距 / 圆角 / 阴影 / 动画）
-├── design-system.md         # 组件清单 + 排版规范
-├── orka-components.html     # 组件库展示页
-├── tokens.json              # 设计 token 的 JSON 导出
-├── CLAUDE.md                # 给 AI 协作者的项目工作指南（导航流程、CSS 约定、Figma 工作流）
-├── fonts/                   # Inter / Playfair
-├── *.png / *.webp / *.svg   # 产品图、icon、背景图
-├── manifest.json            # PWA 元数据
-├── wrangler.toml            # Cloudflare Workers 部署配置
-├── .assetsignore            # 部署时排除的文件清单
-└── .github/workflows/       # CI 自动部署
-```
-
-## 已实现的主要界面
-
-**用户端（底部 4 个 tab）**
-- 音量控制：左右耳音量 + 通用调节
-- 降噪模式：off / 舒适 / 强劲 / 极致 + 自定义场景
-- 媒体：流媒体 / 通话双面板
-- 聆听方案：进入方案详情 + 远程验配入口
-
-**亲友代调流程**（splash → 我是家属）
-- 教程 → 昵称 → 蓝牙绑定 → 连接中 → 家属主页
-- 家属端两个 tab：代调 / 使用数据
-- **使用数据看板**：关怀 banner（达标/未达标双态、声波弧纹）+ 总时长/自上次记录下拉切换 + 推荐12h 阈值对比条 + 聆听环境/程序偏好/音量档位
-
-**用户端连接码视图**（被代调方）
-- 4 位连接码 + 已绑定亲属管理 + 解除绑定
-
-详细的层级关系、CSS 命名前缀（`fh-`/`fp-`/`uc-`/`ucbv-`/`tut-`/`bt-`/`urb-`）和 Figma 同步工作流见 [CLAUDE.md](./CLAUDE.md)。
+> Best viewed on iPhone Safari (*Share → Add to Home Screen* runs it as a standalone PWA). On desktop it renders inside a 390×844 iPhone frame.
 
 ---
 
-## 本地开发
+## What this prototype demonstrates
 
-零构建、零依赖。最简单：
+- **Token-driven design system** — a single source of color, type, spacing, radii, shadow, and motion tokens (`aurio-tokens.css` / `tokens.json`) drives the whole UI.
+- **Glassmorphism with real depth** — layered frosted surfaces, soft shadows, and an "Eastern-calm" (东方禅意) visual direction rather than flat defaults.
+- **Micro-interactions** — draggable radial volume gauge, animated noise-mode backgrounds, scene-following auto program, and smooth state transitions on compositor-friendly properties.
+- **iOS PWA patterns** — installable manifest, status-bar styling, safe-area handling, and a phone-frame presentation that adapts to real devices.
+- **Hand-written interaction logic** — vanilla-JS state and navigation, no framework, data-driven render rather than in-place DOM mutation.
+
+---
+
+## Screens
+
+**Onboarding**
+- Splash → "Get started" → Bluetooth pairing sheet (ready → searching → found → pairing → connected).
+
+**Tab 1 — Volume**
+- Radial gauge with a draggable thumb, fine +/− control, and a mute pill.
+- Left/right-ear split mode with independent sliders.
+- Device status chips (connection state / battery) and a collapsible EQ tone card with a per-ear curve.
+
+**Tab 2 — Noise reduction**
+- Four modes — Off / Comfort / Strong / Ultimate — each with its own animated backdrop and theme accent.
+- Scene detection plus a **smart auto program** that follows the surrounding environment, and editable custom scenes.
+
+**Tab 3 — Media**
+- Streaming and phone-call panels with playback controls and media-specific EQ.
+
+**Connectivity states**
+- Bluetooth connect / disconnect overlay with reconnect flow and live status bar.
+
+---
+
+## Tech stack
+
+- **Single-file app** — all HTML, CSS, and JS live in `index.html` (zero build, zero runtime dependencies). Simple to deploy and share; navigation conventions are documented in [CLAUDE.md](./CLAUDE.md).
+- **PWA** — `manifest.json` + Apple touch icon.
+- **Design tokens** — `aurio-tokens.css` (CSS custom properties) with a `tokens.json` export.
+- **Fonts** — self-hosted Inter + Playfair Display (`fonts/`).
+- **Hosting** — Cloudflare Workers static assets (SPA fallback), deployed from CI.
+
+---
+
+## Project structure
+
+```
+.
+├── index.html              # The prototype — HTML + CSS + JS, single source of truth
+├── aurio-tokens.css        # Design tokens (color / spacing / radii / shadow / motion)
+├── aurio-components.html   # Component showcase (dev reference)
+├── design-system.md        # Component inventory + type/motion spec
+├── tokens.json             # JSON export of the design tokens
+├── CLAUDE.md               # Navigation map, CSS conventions, design-sync workflow
+├── manifest.json           # PWA metadata
+├── wrangler.toml           # Cloudflare Workers config
+├── .assetsignore           # Files excluded from deploy
+├── .github/workflows/      # CI auto-deploy
+├── fonts/                  # Inter / Playfair Display (woff2)
+└── *.png / *.webp / *.svg  # Product, icon, and background imagery
+```
+
+---
+
+## Local development
+
+Zero build, zero dependencies.
 
 ```bash
-# 在浏览器直接打开
+# open directly
 open index.html
+
+# or serve (needed for PWA / service-worker behavior)
+python3 -m http.server 8000   # → http://localhost:8000
+# or: npx serve .
 ```
 
-如果需要 PWA / service worker / 跨域请求行为，起一个本地 server：
+Target device for all screenshots/debugging: **iPhone 390×844**.
+
+---
+
+## Deployment
+
+CI deploys to Cloudflare Workers on push to `main` (`wrangler deploy`). `.assetsignore` keeps internal docs, the component showcase, and redundant image sources off the edge — only `index.html` and the assets it references ship.
 
 ```bash
-python3 -m http.server 8000
-# 访问 http://localhost:8000
-```
-
-或：
-
-```bash
-npx serve .
+npx wrangler deploy          # manual deploy (needs CLOUDFLARE_API_TOKEN)
 ```
 
 ---
 
-## 部署
+## Design system
 
-### 自动（推荐）
-
-push 到 `main` 分支 → GitHub Actions 自动跑 `wrangler deploy` → 约 30 秒后线上更新。
-
-```bash
-git add .
-git commit -m "feat: 加了某某交互"
-git push
-```
-
-查看部署状态：
-
-```bash
-gh run watch                # 看最新一次 workflow
-gh run list --limit 5       # 看最近 5 次
-```
-
-### 手动（调试或紧急时）
-
-```bash
-npx wrangler deploy         # 需要 CLOUDFLARE_API_TOKEN 在 ~/.zshrc
-```
-
-`.assetsignore` 控制哪些文件**不**部署到 Cloudflare（如 `.md`、`orka-tokens.css`、`index-en/zh.html`、`.claude/`、`.wrangler/` 等）；只有 `index.html` 和它引用的资源上线。
-
----
-
-## 设计同步（Figma → HTML）
-
-设计 token 集中在 `orka-tokens.css`。从 Figma 同步样式时：
-
-- **颜色必须引用** `orka-tokens.css` 里的 CSS 变量（如 `var(--blue-main)`），不写裸 hex 值。
-- Figma 颜色在 token 里无精确匹配时，标出来让设计师决定。
-- 已知 token 速查：`--blue-main #234d77`、`--blue-deep #102b46`、`--warm-main #c89e72`、`--txt-dark #18212d`、`--txt-soft #6d7682`、`--color-error #FF4B3A`。
-- 家属端使用数据看板另用一组 token（`--fpd-ink/-muted/-track/-fill/-met/-accent`），同步自 Figma 数据看板 DS。
-
-相关 Figma 文件：
-- 设计系统：`WjU4vBX87UWVEMeqNPt871`
-- 数据看板：`dBl3ZoaVm5WU1DZ6nkFfsw`
-
----
-
-## 技术备注
-
-- **单文件原型**：所有 HTML / CSS / JS 都在 `index.html`（约 7500+ 行）。这样部署/分享简单，代价是大模块编辑时上下文密集——参考 `CLAUDE.md` 的导航说明。
-- **不可变性优先**：JS 改 DOM 时避免就地变更全局状态；用 class toggle + 数据驱动 render 函数（如 `fpdRender(scope)`）。
-- **目标设备**：iPhone（390×844）。所有截图/调试都以这个尺寸为准。
-- **总仓库 ≈ 1.4 MB**，`index.html` 单文件 ≈ 316 KB。
+See [design-system.md](./design-system.md) for the component inventory, typography scale, spacing/radii, glassmorphism recipe, and motion timings. Colors are always referenced through `aurio-tokens.css` variables (e.g. `var(--blue-main)`) — never raw hex.

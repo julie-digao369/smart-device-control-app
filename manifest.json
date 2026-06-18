@@ -1,6 +1,6 @@
 {
-  "name": "Hearwave Pro",
-  "short_name": "Hearwave",
+  "name": "Aurio Pro",
+  "short_name": "Aurio",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",

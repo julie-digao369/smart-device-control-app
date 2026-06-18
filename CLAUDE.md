@@ -1,10 +1,12 @@
-# ORKA 绘听 1.0.0 — Claude 工作指南
+# Aurio 1.0.0 — Claude 工作指南
+
+> Aurio 是匿名化的虚构品牌；本项目为个人设计作品集 demo，与任何真实公司无关。
 
 ## 项目概述
 
-**Orka 助听器伴侣 App 的 iOS PWA 交互原型。**
+**Aurio 助听器伴侣 App 的 iOS PWA 交互原型。**
 - 单文件实现：所有 HTML、CSS、JS 都在 `index.html`（约 5700+ 行）
-- 设计 token 集中在 `orka-tokens.css`
+- 设计 token 集中在 `aurio-tokens.css`
 - 完整设计系统文档见 `design-system.md`
 - 目标设备：iPhone（390×844），模拟手机外壳展示
 
@@ -15,7 +17,7 @@
 | 文件 | 作用 |
 |------|------|
 | `index.html` | 全部 HTML + CSS + JS，单一真相来源 |
-| `orka-tokens.css` | CSS 自定义属性（颜色、间距、圆角、阴影、动画） |
+| `aurio-tokens.css` | CSS 自定义属性（颜色、间距、圆角、阴影、动画） |
 | `design-system.md` | 组件清单、排版规范、动画参数（开发参考） |
 | `tokens.json` | 设计 token 的 JSON 导出（备用） |
 
@@ -78,7 +80,7 @@ Tab class `.active` 控制高亮状态。
 
 ### Token 使用规则（来自 Figma 同步）
 
-- 颜色必须引用 `orka-tokens.css` 里的 CSS 变量，不写裸 hex 值
+- 颜色必须引用 `aurio-tokens.css` 里的 CSS 变量，不写裸 hex 值
 - 若 Figma 颜色在 token 里无精确匹配，标出来让设计师决定
 - 已知 token 速查：`--blue-main #234d77`、`--warm-main #c89e72`、`--txt-dark #18212d`、`--txt-soft #6d7682`、`--color-error #FF4B3A`
 
@@ -87,7 +89,7 @@ Tab class `.active` 控制高亮状态。
 ## Figma → HTML 同步工作流
 
 1. 在 Figma 选中 Frame，复制链接
-2. 发链接给 Claude，说明目标 + "颜色用 orka-tokens.css 变量"
+2. 发链接给 Claude，说明目标 + "颜色用 aurio-tokens.css 变量"
 3. Claude 通过 MCP 读取 Figma 数据，比对 token，更新 index.html
 
 Figma MCP 已配置为项目级 SSE 服务器，重启 Claude Code 后自动可用。
