@@ -3,7 +3,7 @@
 ## 项目概述
 
 **Orka 助听器伴侣 App 的 iOS PWA 交互原型。**
-- 单文件实现：所有 HTML、CSS、JS 都在 `index.html`（约 6500+ 行）
+- 单文件实现：所有 HTML、CSS、JS 都在 `index.html`（约 5700+ 行）
 - 设计 token 集中在 `orka-tokens.css`
 - 完整设计系统文档见 `design-system.md`
 - 目标设备：iPhone（390×844），模拟手机外壳展示
@@ -28,20 +28,14 @@
 ```
 .phone（手机外壳容器）
 ├── .status（iOS 状态栏，固定顶部）
-├── main.scroll × 4（主页面，同一时间只有一个 display:block）
+├── main.scroll × 3（主页面，同一时间只有一个 display:block）
 │   ├── #volumePage     ← Tab 1：音量控制
 │   ├── #noisePage      ← Tab 2：降噪模式
-│   ├── #mediaPage      ← Tab 3：媒体（流媒体/通话）
-│   └── #listeningPage  ← Tab 4：聆听方案
+│   └── #mediaPage      ← Tab 3：媒体（流媒体/通话）
 ├── .tabbar（底部标签栏，始终可见）
 ├── .disconnect-overlay ← 蓝牙断连状态（z-index 叠加）
-├── .bt-pair-overlay    ← 蓝牙配对弹窗
-├── .splash-overlay     ← 启动页（最先显示）
-├── .family-overlay#friendFlow  ← 亲友代调整体容器
-├── .user-code-overlay  ← 用户端连接码视图
-├── .user-perm-overlay  ← 用户授权弹窗
-├── .user-remote-overlay← 远程调节中状态
-└── .net-error-overlay  ← 网络错误弹窗
+├── .bt-pair-overlay    ← 蓝牙配对弹窗（启动页「开始探索」后）
+└── .splash-overlay     ← 启动页（最先显示，唯一入口「开始探索」）
 ```
 
 ### Tab 导航
@@ -56,37 +50,19 @@ Tab class `.active` 控制高亮状态。
 
 ---
 
-## 亲友代调流程（最容易搞混的部分）
+## 启动流程
 
 ```
-启动页 splashOverlay
-  ├── "探索" → 关闭 splash，进入主 Tab 区
-  └── "我是家属" → 打开 friendFlow (data-mode="friend")
-
-friendFlow (data-mode="friend")  ← 家属视角
-  fpWelcome → fpNickname → fpBind → fpConnecting → fpHome
-  
-  fpHome（好友端绑定后主页）包含：
-  - 产品图 + 设备名 + 序列号 chip
-  - "申请连接"按钮 (#fhConnectBtn)
-  - "操作指引"卡片 (.fh-guide)
-  - 危险区：解除家人绑定 (#fhUnbindBtn)
-
-userCodeOverlay (data-mode="user")  ← 用户视角（被调节方）
-  uc-code-card    → 显示 4 位连接码
-  ucBoundView     → 已绑定好友后的状态视图（含解除绑定）
+启动页 splashOverlay（默认 .active）
+  └── "开始探索" (#splashExplore) → 关闭 splash → 蓝牙配对 btPairOverlay → 进入主 Tab 区
 ```
 
-**关键：friend 视角 ≠ user 视角。**  
-- `fh-*` class = friend home（家属操作界面）  
-- `ucbv-*` class = user code bound view（用户端已绑定状态）  
-- `uc-*` class = user code（用户连接码区域）
+> 亲友代调（家属远程协助）功能已移除；启动页仅保留「开始探索」单一入口。
 
-### 页面内子状态
+## 页面内子状态
 
 | 页面 | 子状态 |
 |------|--------|
-| `listeningPage` | 点击方案卡片 → 打开 `listeningDetail`；`.detail-back` 关闭 |
 | `noisePage` | 4 个 mode 按钮切换 `data-mode`（off/comfort/strong/ultimate） |
 | `mediaPage` | stream/call 双 tab，控制对应 panel 显示 |
 
@@ -98,13 +74,7 @@ userCodeOverlay (data-mode="user")  ← 用户视角（被调节方）
 
 | 前缀 | 对应区域 |
 |------|----------|
-| `fh-` | Friend Home（好友端绑定后主页） |
-| `fp-` | Friend flow Page（亲友流程步骤） |
-| `uc-` | User Code（用户连接码区域） |
-| `ucbv-` | User Code Bound View（用户已绑定状态） |
-| `tut-` | Tutorial（引导步骤） |
-| `bt-` | Bluetooth 配对相关 |
-| `urb-` | User Remote Banner |
+| `bt-` | Bluetooth 配对相关（启动页配对流程） |
 
 ### Token 使用规则（来自 Figma 同步）
 

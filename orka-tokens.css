@@ -95,7 +95,7 @@
   --shadow-soft:        0 10px 28px rgba(17,31,47,0.10);  /* Card elevation */
   --shadow-thumb:       0 8px  20px rgba(16,34,55,0.18);  /* Slider thumbs */
   --shadow-phone-frame: 0 24px 72px rgba(12,24,39,0.26);  /* Outer device frame */
-  --shadow-toast:       0 10px 26px rgba(0,0,0,0.28);     /* Toast / tip */
+  --shadow-toast:       0 10px 26px rgba(26,26,26,0.28);     /* Toast / tip */
 
   /* Inset card highlights */
   --shadow-card-inset-top:    inset 0 1px 0 rgba(255,255,255,0.64);

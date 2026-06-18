@@ -1,6 +1,6 @@
 {
-  "name": "Orka App 交互原型",
-  "short_name": "Orka A",
+  "name": "Hearwave Pro",
+  "short_name": "Hearwave",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
