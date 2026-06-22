@@ -4,7 +4,7 @@ An iOS-style PWA **interaction prototype** for a glasses-form hearing aid: a cal
 
 > **Portfolio / design-demo notice.** *Aurio* is a **fictional brand**. This is a personal design-portfolio piece — an anonymized concept demo that is **not affiliated with, endorsed by, or built from the confidential materials of any real company**. It is inspired by real product-design experience, with all brand identity, names, and assets re-created for demonstration purposes only.
 
-🌐 **Live demo:** deployed to Cloudflare Workers from CI — see [Deployment](#deployment). For an immediate preview, run it locally (see [Local development](#local-development)).
+🌐 **Live demo:** https://smart-device-control-app.julie-gao369.workers.dev
 
 > Best viewed on iPhone Safari (*Share → Add to Home Screen* runs it as a standalone PWA). On desktop it renders inside a 390×844 iPhone frame.
 
