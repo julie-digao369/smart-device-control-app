@@ -16,6 +16,9 @@ README.md
 # --- Redundant PNG sources (WebP equivalents are what index.html references) ---
 bg-listen.png
 bg-remote.png
+# 产品图带盒子.png is the 4.4 MB master for the setup screen; the app ships the
+# optimized case-hero.jpg instead, so keep the heavy source out of the deploy.
+产品图带盒子.png
 # NOTE: 产品图.png IS referenced by index.html (splash + pairing screen),
 # so it is intentionally NOT excluded here — it must ship.
 

@@ -2907,14 +2907,14 @@
     /* ── Pair sheet (onboarding) ── */
     .pair-backdrop {
       position: absolute; inset: 0; z-index: 112;
-      display: none; background: #F1EFEA; opacity: 0;
+      display: none; background: rgba(20,22,28,0.42); opacity: 0;
     }
-    .pair-backdrop.active { display: block; opacity: 1; }
+    .pair-backdrop.active { display: block; opacity: 1; animation: ob-fade 220ms ease; }
     .pair-backdrop.closing { animation: ob-fade-out 240ms ease forwards; }
-    /* brand header anchoring the clean light screen above the sheet */
+    /* legacy brand header — the sheet now opens over the dimmed setup screen */
     .pair-brand {
       position: absolute; top: 20%; left: 0; right: 0;
-      display: flex; flex-direction: column; align-items: center; gap: 7px;
+      display: none; flex-direction: column; align-items: center; gap: 7px;
       text-align: center; pointer-events: none;
     }
     .pair-brand-mark { font-size: 25px; font-weight: 800; letter-spacing: 0.4px; color: #8E8E96; }
@@ -3080,6 +3080,64 @@
     @keyframes splash-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
     @media (prefers-reduced-motion: reduce) {
       .splash-mark, .splash-stage, .splash-cta, .splash-glasses { animation: none !important; }
+    }
+
+    /* ── Get-ready setup instructions (splash → here → pairing sheet) ── */
+    .getready-overlay {
+      position: absolute; inset: 0; z-index: 111;
+      display: none; flex-direction: column;
+      background: #fff; font-family: var(--font-system);
+      padding: calc(env(safe-area-inset-top) + 52px) 22px calc(env(safe-area-inset-bottom) + 22px);
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    .getready-overlay.active { display: flex; animation: gr-fade 360ms ease both; }
+    .gr-back {
+      position: absolute; top: calc(env(safe-area-inset-top) + 48px); left: 16px;
+      width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%;
+      background: #F2F2F4; color: #1A1A1C; font-size: 19px; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .15s ease;
+    }
+    .gr-back:active { opacity: .55; }
+    .gr-hero {
+      width: 86%; max-width: 326px; height: auto; align-self: center;
+      margin: 18px auto 6px;
+    }
+    .gr-title {
+      margin: 6px 0 20px; text-align: center;
+      font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--txt-dark);
+    }
+    .gr-steps {
+      list-style: none; margin: 0 auto; padding: 0;
+      width: 100%; max-width: 360px; align-self: center;
+      display: flex; flex-direction: column; gap: 17px;
+    }
+    .gr-step { display: flex; gap: 13px; align-items: flex-start; }
+    .gr-step-num {
+      flex: none; width: 24px; height: 24px; margin-top: 1px;
+      border-radius: 50%; border: 1.5px solid #C9CDD3; color: var(--txt-soft);
+      font-size: 12.5px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gr-step-text { font-size: 15px; line-height: 1.42; color: var(--txt-dark); }
+    .gr-actions {
+      margin: auto auto 0; padding-top: 26px;
+      width: 100%; max-width: 360px; align-self: center;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .gr-btn-primary, .gr-btn-secondary {
+      width: 100%; height: 54px; border: 0; border-radius: 27px;
+      font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .gr-btn-primary { background: #565663; color: #fff; box-shadow: 0 12px 26px rgba(86,86,99,0.26); }
+    .gr-btn-primary:active { transform: scale(.98); box-shadow: 0 6px 16px rgba(86,86,99,0.22); }
+    .gr-btn-secondary { background: #F1F1F3; color: #1A1A1C; font-size: 16px; }
+    .gr-btn-secondary:active { transform: scale(.98); background: #E7E7EA; }
+    @keyframes gr-fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .getready-overlay.active { animation: none !important; }
     }
   </style>
 </head>
@@ -3839,6 +3897,23 @@
           <h1 class="splash-title">Hearing aids<br><em>hidden in glasses.</em></h1>
         </div>
         <button class="splash-cta" id="splashExplore">Get started</button>
+      </div>
+
+      <!-- ═══ Get-ready setup instructions (splash → here → pairing sheet) ═══ -->
+      <div class="getready-overlay" id="getReadyOverlay">
+        <button class="gr-back" id="grBack" type="button" aria-label="Back">←</button>
+        <img class="gr-hero" src="case-hero.jpg" width="780" height="717"
+             alt="Aurio Smart glasses resting in their open charging case" />
+        <h1 class="gr-title">Get your aids ready</h1>
+        <ol class="gr-steps">
+          <li class="gr-step"><span class="gr-step-num">1</span><span class="gr-step-text">Make sure your glasses are in their case, plugged into a power source and nearby.</span></li>
+          <li class="gr-step"><span class="gr-step-num">2</span><span class="gr-step-text">Remove the protective tab. The LED on the glasses will pulse white when ready to pair.</span></li>
+          <li class="gr-step"><span class="gr-step-num">3</span><span class="gr-step-text">Leave the glasses inside the case to charge.</span></li>
+        </ol>
+        <div class="gr-actions">
+          <button class="gr-btn-primary" id="grPulsing" type="button">LED is pulsing white</button>
+          <button class="gr-btn-secondary" id="grPulledTab" type="button">Already pulled the tab?</button>
+        </div>
       </div>
 
 
@@ -5135,6 +5210,7 @@
        ═══════════════════════════════════════════════ */
     (function initOnboarding() {
       const splashOverlay  = document.getElementById('splashOverlay');
+      const getReadyOverlay = document.getElementById('getReadyOverlay');
       const pairBackdrop   = document.getElementById('pairBackdrop');
       const pairSheet      = document.getElementById('pairSheet');
       const pairBtn        = document.getElementById('pairBtn');
@@ -5159,7 +5235,7 @@
       const STAGE = {
         ready:     { status: 'Get your aids ready', btn: 'Start',      dot: 0, busy: false },
         searching: { status: 'Searching nearby…',   btn: 'Searching…', dot: 1, busy: true  },
-        found:     { status: 'Found nearby',         btn: 'Pair',       dot: 1, busy: false },
+        found:     { status: 'Device found',         btn: 'Pair',       dot: 1, busy: false },
         pairing:   { status: 'Pairing…',             btn: 'Pairing…',   dot: 2, busy: true  },
         done:      { status: 'Connected',            btn: 'Paired',     dot: 2, busy: false },
       };
@@ -5195,8 +5271,20 @@
           pairBackdrop.classList.remove('active', 'closing');
           resetEars();
           setStage('ready');
-          splashOverlay.classList.add('active');   // ← returns to the welcome page
+          getReadyOverlay.classList.add('active');   // ← back to the setup screen behind it
         }, 300);
+      }
+
+      // Open the sheet straight into scanning, over the dimmed setup screen.
+      function beginPairingFlow() {
+        clearPairTimers();
+        selectedDevice = PRODUCT.name;
+        pairName.textContent = PRODUCT.name;
+        if (PRODUCT.img) pairHeroImg.src = PRODUCT.img;
+        resetEars();
+        pairBackdrop.classList.remove('closing');
+        pairBackdrop.classList.add('active');
+        startSearching();   // 'searching' → auto-advances to 'found'
       }
 
       // The primary button advances the flow; system steps (scan, bond) auto-advance.
@@ -5239,6 +5327,7 @@
         clearPairTimers();
         setConnected(name);
         enterApp();
+        getReadyOverlay.classList.remove('active');   // reveal the app, not the setup screen
         pairBackdrop.classList.add('closing');
         setTimeout(() => {
           pairBackdrop.classList.remove('active', 'closing');
@@ -5249,11 +5338,19 @@
 
       pairBtn.addEventListener('click', onPairBtn);
 
-      /* ── Splash "Get Started" → straight to the pairing sheet ── */
+      /* ── Splash "Get started" → setup instructions ── */
       document.getElementById('splashExplore').addEventListener('click', () => {
         splashOverlay.classList.remove('active');
-        openPairSheet(PRODUCT.name, PRODUCT.img, PRODUCT.hint);
+        getReadyOverlay.classList.add('active');
       });
+      /* ── Setup back arrow → splash ── */
+      document.getElementById('grBack').addEventListener('click', () => {
+        getReadyOverlay.classList.remove('active');
+        splashOverlay.classList.add('active');
+      });
+      /* ── Either setup CTA → open the pairing sheet and start scanning ── */
+      document.getElementById('grPulsing').addEventListener('click', beginPairingFlow);
+      document.getElementById('grPulledTab').addEventListener('click', beginPairingFlow);
     })();
 
   </script>
