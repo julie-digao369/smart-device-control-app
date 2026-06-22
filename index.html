@@ -2967,21 +2967,8 @@
       opacity: 0; z-index: 1;
     }
     .pair-sheet[data-stage="pairing"] .pair-spinner { opacity: 1; animation: ob-spin .9s linear infinite; }
-    .pair-check {
-      position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
-      border-radius: 50%; background: #2BB673; z-index: 3; opacity: 0; transform: scale(.6);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 0 4px #fff, 0 6px 16px rgba(43,182,115,0.28);
-    }
-    .pair-check svg { width: 24px; height: 24px; stroke: #fff; stroke-width: 3; fill: none; }
-    /* soft expanding halo behind the check (separate element → own transform) */
-    .pair-halo {
-      position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
-      border-radius: 50%; border: 2px solid rgba(43,182,115,0.5); z-index: 3; opacity: 0;
-    }
-    .pair-sheet[data-stage="done"] .pair-hero-img { opacity: .5; }
-    .pair-sheet[data-stage="done"] .pair-check { animation: ob-check 420ms cubic-bezier(.22,1,.36,1) forwards; }
-    .pair-sheet[data-stage="done"] .pair-halo { animation: ob-halo 1000ms ease-out forwards; }
+    /* success (done) is carried by the green "Connected" status + L/R pills;
+       the glasses stays at full opacity (no check overlay) */
 
     /* Pairing-mode instruction — only while getting ready */
     .pair-hint {
@@ -3037,17 +3024,12 @@
     @keyframes ob-ring { 0% { transform: scale(.3); opacity: 0; } 12% { opacity: .5; } 100% { transform: scale(2.2); opacity: 0; } }
     @keyframes ob-core-pulse { 0%, 100% { transform: scale(.8); opacity: .5; } 50% { transform: scale(1); opacity: 1; } }
     @keyframes ob-spin { to { transform: rotate(360deg); } }
-    @keyframes ob-check { 0% { opacity: 0; transform: scale(.6); } 100% { opacity: 1; transform: scale(1); } }
-    @keyframes ob-halo { 0% { opacity: .6; transform: scale(.6); } 100% { opacity: 0; transform: scale(2); } }
     @keyframes ob-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(86,86,99,0.4); } 50% { box-shadow: 0 0 0 4px rgba(86,86,99,0); } }
     @media (prefers-reduced-motion: reduce) {
       .pair-ring, .pair-spinner, .pair-core { animation: none !important; opacity: 0 !important; }
       /* no scan motion → just show the device */
       .pair-sheet[data-stage="searching"] .pair-hero-img { opacity: 1 !important; transform: none !important; }
       .pair-ear i { animation: none !important; }
-      .pair-check { animation: none !important; }
-      .pair-halo { animation: none !important; opacity: 0 !important; }
-      .pair-sheet[data-stage="done"] .pair-check { opacity: 1 !important; transform: none !important; }
       .pair-backdrop.active, .pair-backdrop.active .pair-sheet { animation: none !important; }
       .pair-sheet { transform: none !important; }
     }
@@ -3906,8 +3888,6 @@
             <span class="pair-core"></span>
             <span class="pair-spinner"></span>
             <img class="pair-hero-img" id="pairHeroImg" src="产品图.png" alt="" />
-            <span class="pair-halo" aria-hidden="true"></span>
-            <span class="pair-check" id="pairCheck"><svg viewBox="0 0 24 24"><polyline points="5 13 10 18 19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
           <p class="pair-hint" id="pairHint">Press and hold the temple button until the light pulses.</p>
           <div class="pair-ears" id="pairEars" aria-hidden="true">
