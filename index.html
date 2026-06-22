@@ -10,6 +10,7 @@
   <link rel="apple-touch-icon" href="icon-180.png">
   <title>Aurio</title>
   <link rel="preload" as="image" href="启动页背景图.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="产品图.png" fetchpriority="high">
   <style>
     :root {
       --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
@@ -2967,13 +2968,20 @@
     }
     .pair-sheet[data-stage="pairing"] .pair-spinner { opacity: 1; animation: ob-spin .9s linear infinite; }
     .pair-check {
-      position: absolute; top: 50%; left: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px;
-      border-radius: 50%; background: #2BB673; z-index: 3; opacity: 0; transform: scale(.4);
+      position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+      border-radius: 50%; background: #2BB673; z-index: 3; opacity: 0; transform: scale(.6);
       display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 4px #fff, 0 6px 16px rgba(43,182,115,0.28);
     }
-    .pair-check svg { width: 30px; height: 30px; stroke: #fff; stroke-width: 3; fill: none; }
-    .pair-sheet[data-stage="done"] .pair-hero-img { opacity: .16; }
-    .pair-sheet[data-stage="done"] .pair-check { animation: ob-check 460ms cubic-bezier(.34,1.56,.64,1) forwards; }
+    .pair-check svg { width: 24px; height: 24px; stroke: #fff; stroke-width: 3; fill: none; }
+    /* soft expanding halo behind the check (separate element → own transform) */
+    .pair-halo {
+      position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+      border-radius: 50%; border: 2px solid rgba(43,182,115,0.5); z-index: 3; opacity: 0;
+    }
+    .pair-sheet[data-stage="done"] .pair-hero-img { opacity: .5; }
+    .pair-sheet[data-stage="done"] .pair-check { animation: ob-check 420ms cubic-bezier(.22,1,.36,1) forwards; }
+    .pair-sheet[data-stage="done"] .pair-halo { animation: ob-halo 1000ms ease-out forwards; }
 
     /* Pairing-mode instruction — only while getting ready */
     .pair-hint {
@@ -3015,7 +3023,7 @@
     .pair-btn:active { transform: scale(.98); }
     .pair-sheet[data-stage="searching"] .pair-btn,
     .pair-sheet[data-stage="pairing"] .pair-btn { background: #9A9AA6; cursor: default; }
-    .pair-sheet[data-stage="done"] .pair-btn { background: #2BB673; }
+    /* done: button stays neutral (no green); success is carried by the check + halo */
 
     /* Connected pill state (post-pairing) */
     .conn-pill.connected .conn-dot {
@@ -3029,7 +3037,8 @@
     @keyframes ob-ring { 0% { transform: scale(.3); opacity: 0; } 12% { opacity: .5; } 100% { transform: scale(2.2); opacity: 0; } }
     @keyframes ob-core-pulse { 0%, 100% { transform: scale(.8); opacity: .5; } 50% { transform: scale(1); opacity: 1; } }
     @keyframes ob-spin { to { transform: rotate(360deg); } }
-    @keyframes ob-check { 0% { opacity: 0; transform: scale(.4); } 60% { opacity: 1; transform: scale(1.14); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes ob-check { 0% { opacity: 0; transform: scale(.6); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes ob-halo { 0% { opacity: .6; transform: scale(.6); } 100% { opacity: 0; transform: scale(2); } }
     @keyframes ob-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(86,86,99,0.4); } 50% { box-shadow: 0 0 0 4px rgba(86,86,99,0); } }
     @media (prefers-reduced-motion: reduce) {
       .pair-ring, .pair-spinner, .pair-core { animation: none !important; opacity: 0 !important; }
@@ -3037,6 +3046,7 @@
       .pair-sheet[data-stage="searching"] .pair-hero-img { opacity: 1 !important; transform: none !important; }
       .pair-ear i { animation: none !important; }
       .pair-check { animation: none !important; }
+      .pair-halo { animation: none !important; opacity: 0 !important; }
       .pair-sheet[data-stage="done"] .pair-check { opacity: 1 !important; transform: none !important; }
       .pair-backdrop.active, .pair-backdrop.active .pair-sheet { animation: none !important; }
       .pair-sheet { transform: none !important; }
@@ -3070,7 +3080,8 @@
       position: relative; z-index: 1;
       width: 86%; max-width: 348px; height: auto;
       filter: drop-shadow(0 18px 30px rgba(60,58,66,0.16));
-      animation: splash-float 6s ease-in-out infinite;
+      will-change: transform;
+      animation: splash-float 6s ease-in-out .9s infinite;
     }
     .splash-title {
       font-family: inherit; margin: 0; text-align: center;
@@ -3895,6 +3906,7 @@
             <span class="pair-core"></span>
             <span class="pair-spinner"></span>
             <img class="pair-hero-img" id="pairHeroImg" src="产品图.png" alt="" />
+            <span class="pair-halo" aria-hidden="true"></span>
             <span class="pair-check" id="pairCheck"><svg viewBox="0 0 24 24"><polyline points="5 13 10 18 19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
           <p class="pair-hint" id="pairHint">Press and hold the temple button until the light pulses.</p>
@@ -3911,7 +3923,7 @@
       <div class="splash-overlay active" id="splashOverlay">
         <span class="splash-mark">Aurio</span>
         <div class="splash-stage">
-          <img class="splash-glasses" src="产品图.png" alt="Aurio Smart glasses" />
+          <img class="splash-glasses" src="产品图.png" alt="Aurio Smart glasses" fetchpriority="high" decoding="async" />
           <h1 class="splash-title">Hearing aids<br><em>hidden in glasses.</em></h1>
         </div>
         <button class="splash-cta" id="splashExplore">Get started</button>
@@ -5252,7 +5264,7 @@
       // Each stage maps to a status line, button label, and progress dot.
       const STAGE = {
         ready:     { status: 'Get your aids ready', btn: 'Start',      dot: 0, busy: false },
-        searching: { status: 'Searching nearby…',   btn: 'Searching…', dot: 1, busy: true  },
+        searching: { status: 'Searching nearby…',   btn: 'Searching…', dot: 0, busy: true  },
         found:     { status: 'Device found',         btn: 'Pair',       dot: 1, busy: false },
         pairing:   { status: 'Pairing…',             btn: 'Pairing…',   dot: 2, busy: true  },
         done:      { status: 'Connected',            btn: 'Paired',     dot: 2, busy: false },
@@ -5326,7 +5338,7 @@
         after(600,  () => { earL.classList.remove('connecting'); earL.classList.add('bonded'); });
         after(650,  () => earR.classList.add('connecting'));
         after(1350, () => { earR.classList.remove('connecting'); earR.classList.add('bonded'); });
-        after(1550, () => { setStage('done'); after(820, () => finishPairing(selectedDevice)); });
+        after(1550, () => { setStage('done'); after(1300, () => finishPairing(selectedDevice)); });
       }
 
       function setConnected(name) {
