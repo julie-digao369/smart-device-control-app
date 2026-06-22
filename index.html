@@ -2942,16 +2942,24 @@
       position: relative; width: 210px; height: 168px;
       display: flex; align-items: center; justify-content: center; margin: 6px 0 2px;
     }
-    .pair-hero-img { width: 184px; height: 144px; object-fit: contain; position: relative; z-index: 2; transition: opacity .3s ease; }
-    .pair-ring {
-      position: absolute; top: 50%; left: 50%; width: 92px; height: 92px; margin: -46px 0 0 -46px;
-      border-radius: 50%; border: 1.5px solid rgba(86,86,99,0.32);
-      transform: scale(.4); opacity: 0; z-index: 1;
+    .pair-hero-img { width: 184px; height: 144px; object-fit: contain; position: relative; z-index: 2; transition: opacity .45s ease, transform .45s ease; }
+    /* glasses stay hidden during the scan, then fade-and-grow in once found */
+    .pair-sheet[data-stage="searching"] .pair-hero-img { opacity: 0; transform: scale(.92); }
+    /* sonar: a soft pulsing core that the rings ripple out from (scan only) */
+    .pair-core {
+      position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px;
+      border-radius: 50%; background: #565663; z-index: 2; opacity: 0;
     }
-    /* rings only sweep while actively scanning */
-    .pair-sheet[data-stage="searching"] .pair-ring { animation: ob-ring 2.4s ease-out infinite; }
-    .pair-sheet[data-stage="searching"] .pair-ring:nth-of-type(2) { animation-delay: .8s; }
-    .pair-sheet[data-stage="searching"] .pair-ring:nth-of-type(3) { animation-delay: 1.6s; }
+    .pair-sheet[data-stage="searching"] .pair-core { opacity: 1; animation: ob-core-pulse 2s ease-in-out infinite; }
+    .pair-ring {
+      position: absolute; top: 50%; left: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px;
+      border-radius: 50%; border: 1.5px solid rgba(86,86,99,0.35);
+      transform: scale(.3); opacity: 0; z-index: 1;
+    }
+    /* rings only ripple while actively scanning */
+    .pair-sheet[data-stage="searching"] .pair-ring { animation: ob-ring 2.7s ease-out infinite; }
+    .pair-sheet[data-stage="searching"] .pair-ring:nth-of-type(2) { animation-delay: .9s; }
+    .pair-sheet[data-stage="searching"] .pair-ring:nth-of-type(3) { animation-delay: 1.8s; }
     .pair-spinner {
       position: absolute; top: 50%; left: 50%; width: 170px; height: 170px; margin: -85px 0 0 -85px;
       border-radius: 50%; border: 3px solid rgba(86,86,99,0.16); border-top-color: #565663;
@@ -3018,12 +3026,15 @@
     @keyframes ob-fade-out { from { opacity: 1; } to { opacity: 0; } }
     @keyframes ob-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
     @keyframes ob-sheet-down { from { transform: translateY(0); } to { transform: translateY(100%); } }
-    @keyframes ob-ring { 0% { transform: scale(.4); opacity: 0; } 16% { opacity: .85; } 100% { transform: scale(1.7); opacity: 0; } }
+    @keyframes ob-ring { 0% { transform: scale(.3); opacity: 0; } 12% { opacity: .5; } 100% { transform: scale(2.2); opacity: 0; } }
+    @keyframes ob-core-pulse { 0%, 100% { transform: scale(.8); opacity: .5; } 50% { transform: scale(1); opacity: 1; } }
     @keyframes ob-spin { to { transform: rotate(360deg); } }
     @keyframes ob-check { 0% { opacity: 0; transform: scale(.4); } 60% { opacity: 1; transform: scale(1.14); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes ob-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(86,86,99,0.4); } 50% { box-shadow: 0 0 0 4px rgba(86,86,99,0); } }
     @media (prefers-reduced-motion: reduce) {
-      .pair-ring, .pair-spinner { animation: none !important; opacity: 0 !important; }
+      .pair-ring, .pair-spinner, .pair-core { animation: none !important; opacity: 0 !important; }
+      /* no scan motion → just show the device */
+      .pair-sheet[data-stage="searching"] .pair-hero-img { opacity: 1 !important; transform: none !important; }
       .pair-ear i { animation: none !important; }
       .pair-check { animation: none !important; }
       .pair-sheet[data-stage="done"] .pair-check { opacity: 1 !important; transform: none !important; }
@@ -3090,7 +3101,13 @@
       padding: calc(env(safe-area-inset-top) + 52px) 22px calc(env(safe-area-inset-bottom) + 22px);
       overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
-    .getready-overlay.active { display: flex; animation: gr-fade 360ms ease both; }
+    .getready-overlay.active { display: flex; }
+    /* paint the panel instantly (no app bleed-through), settle the content in calmly */
+    .getready-overlay.active > * { animation: gr-rise 520ms cubic-bezier(.22,1,.36,1) both; }
+    .getready-overlay.active .gr-hero    { animation-delay: 40ms; }
+    .getready-overlay.active .gr-title   { animation-delay: 90ms; }
+    .getready-overlay.active .gr-steps   { animation-delay: 140ms; }
+    .getready-overlay.active .gr-actions { animation-delay: 200ms; }
     .gr-back {
       position: absolute; top: calc(env(safe-area-inset-top) + 48px); left: 16px;
       width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%;
@@ -3135,9 +3152,9 @@
     .gr-btn-primary:active { transform: scale(.98); box-shadow: 0 6px 16px rgba(86,86,99,0.22); }
     .gr-btn-secondary { background: #F1F1F3; color: #1A1A1C; font-size: 16px; }
     .gr-btn-secondary:active { transform: scale(.98); background: #E7E7EA; }
-    @keyframes gr-fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes gr-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
     @media (prefers-reduced-motion: reduce) {
-      .getready-overlay.active { animation: none !important; }
+      .getready-overlay.active > * { animation: none !important; }
     }
   </style>
 </head>
@@ -3875,6 +3892,7 @@
             <span class="pair-ring"></span>
             <span class="pair-ring"></span>
             <span class="pair-ring"></span>
+            <span class="pair-core"></span>
             <span class="pair-spinner"></span>
             <img class="pair-hero-img" id="pairHeroImg" src="产品图.png" alt="" />
             <span class="pair-check" id="pairCheck"><svg viewBox="0 0 24 24"><polyline points="5 13 10 18 19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -5297,7 +5315,7 @@
       // Scan first → the device is only "found" once the search completes.
       function startSearching() {
         setStage('searching');
-        after(2000, () => setStage('found'));
+        after(2600, () => setStage('found'));
       }
 
       // Bond BOTH aids in sequence (left, then right) — binaural reality.
